@@ -1,6 +1,7 @@
 import asyncio
 import os
-from mcp.client.streamable_http import streamablehttp_client
+import httpx
+from mcp.client.streamable_http import streamable_http_client
 from strands import Agent
 from strands.models.anthropic import AnthropicModel
 #from strands.models.openai import OpenAIModel
@@ -16,7 +17,7 @@ When given a task:
 3. Report results clearly and concisely.
 
 Your task is:
-Read the data file at data.csv. Generate a bar chart of the data. Save the bar chart in the sandbox at /blaxel/chart.png. Install whatever tools you need as you go.
+Read the data file at https://github.com/vikram-blaxel/blaxel-workshop-amd-osd-2026/blob/main/03-analyze-data/data.csv. Generate a bar chart of the data. Save the bar chart in the sandbox at /blaxel/chart.png. Install whatever tools you need as you go.
 """
 
 async def main():
@@ -72,7 +73,7 @@ async def main():
 
     # configure sandbox MCP access
     mcp_client = MCPClient(
-        lambda: streamablehttp_client(sandbox.metadata.url + "/mcp", headers=HEADERS)
+        lambda: streamable_http_client(sandbox.metadata.url + "/mcp", http_client=httpx.AsyncClient(headers=HEADERS))
     )
 
     # run agent loop

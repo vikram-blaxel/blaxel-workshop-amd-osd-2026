@@ -13,7 +13,7 @@
   - [Generate Anthropic API key](https://platform.claude.com/settings/keys)
   - [Generate Google Gemini API key](https://aistudio.google.com/app/apikey)
 
-## Usage
+## Setup and usage
 
 ```
 python3 -m venv .venv
@@ -21,7 +21,8 @@ source .venv/bin/activate
 pip install -r requirements.txt
 export BL_WORKSPACE=...
 export BL_API_KEY=...
-export ANTHROPIC_API_KEY=...  # or OPENAI_API_KEY or GOOGLE_API_KEY and uncomment in code
+export ANTHROPIC_API_KEY=...  # or OPENAI_API_KEY or GOOGLE_API_KEY, then uncomment the matching model in the script
+python 01-sbx-basics/sandbox.py  # replace with the example you want to run
 ```
 
 ## Examples
