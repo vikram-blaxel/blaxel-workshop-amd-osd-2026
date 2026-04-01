@@ -2,23 +2,21 @@
 
 ## Prerequisites
 
+- Python 3.12+ development environment
 - Blaxel account
   - [Sign up free](https://app.blaxel.ai?utm_source=osd_amd_04_2026&utm_medium=conference&utm_campaign=q2_2026_events)
 - Blaxel CLI
   - [Install the CLI](https://docs.blaxel.ai/cli-reference/introduction?utm_source=osd_amd_04_2026&utm_medium=conference&utm_campaign=q2_2026_events)
 - Blaxel API key
   - [Generate an API key](https://docs.blaxel.ai/Security/Access-tokens#manage-api-keys?utm_source=osd_amd_04_2026&utm_medium=conference&utm_campaign=q2_2026_events)
-- LLM provider API key
-  - [Generate OpenAI API key](https://platform.openai.com/account/api-keys)
-  - [Generate Anthropic API key](https://platform.claude.com/settings/keys)
-  - [Generate Google Gemini API key](https://aistudio.google.com/app/apikey)
+- LLM provider API key (Gemini, Anthropic or OpenAI)
 
 ## Setup and usage
 
 ```
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+pip install blaxel fastapi strands-agents[all] strands-agents-tools
 export BL_WORKSPACE=...
 export BL_API_KEY=...
 export ANTHROPIC_API_KEY=...  # or OPENAI_API_KEY or GOOGLE_API_KEY, then uncomment the matching model in the script
