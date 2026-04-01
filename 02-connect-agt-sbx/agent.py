@@ -7,7 +7,7 @@ from strands.models.anthropic import AnthropicModel
 #from strands.models.openai import OpenAIModel
 #from strands.models.gemini import GeminiModel
 from strands.tools.mcp import MCPClient
-from blaxel.core import SandboxInstance
+from blaxel.core import SandboxInstance, settings
 
 PROMPT = """You are an expert developer with access to a sandbox environment. You can execute commands, manage files, and inspect processes inside the sandbox.
 
@@ -19,11 +19,9 @@ When given a task:
 
 async def main():
 
-    BLAXEL_API_KEY = os.environ["BL_API_KEY"]
     LLM_API_KEY = os.environ["ANTHROPIC_API_KEY"]
     #LLM_API_KEY = os.environ["OPENAI_API_KEY"]
     #LLM_API_KEY = os.environ["GOOGLE_API_KEY"]
-    HEADERS = {"Authorization": f"Bearer {BLAXEL_API_KEY}"}
 
     # create sandbox if it doesn't exist
     sandbox = await SandboxInstance.create_if_not_exists({
@@ -70,7 +68,7 @@ async def main():
 
     # configure sandbox MCP access
     mcp_client = MCPClient(
-        lambda: streamable_http_client(sandbox.metadata.url + "/mcp", http_client=httpx.AsyncClient(headers=HEADERS))
+        lambda: streamable_http_client(sandbox.metadata.url + "/mcp", http_client=httpx.AsyncClient(headers=settings.headers))
     )
 
     # run agent loop

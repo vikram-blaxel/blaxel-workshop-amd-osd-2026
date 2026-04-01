@@ -8,7 +8,7 @@ from strands.models.anthropic import AnthropicModel
 #from strands.models.openai import OpenAIModel
 #from strands.models.gemini import GeminiModel
 from strands.tools.mcp import MCPClient
-from blaxel.core import SandboxInstance
+from blaxel.core import SandboxInstance, settings
 
 host = os.getenv("HOST", "0.0.0.0")
 port = int(os.getenv("PORT", "8000"))
@@ -25,13 +25,10 @@ When given a task:
 
 @app.post("/develop")
 async def develop(request: Request):
-    BLAXEL_API_KEY = os.environ.get("BL_API_KEY")
     LLM_API_KEY = os.environ["ANTHROPIC_API_KEY"]
     #LLM_API_KEY = os.environ["OPENAI_API_KEY"]
     #LLM_API_KEY = os.environ["GOOGLE_API_KEY"]
 
-    if not BLAXEL_API_KEY:
-        raise HTTPException(status_code=500, detail="BL_API_KEY env var is required")
     if not LLM_API_KEY:
         raise HTTPException(status_code=500, detail="ANTHROPIC_API_KEY, OPENAI_API_KEY or GEMINI_API_KEY env var is required")
 
@@ -40,14 +37,13 @@ async def develop(request: Request):
     if not task:
         raise HTTPException(status_code=400, detail="Request body must include a 'task' field")
 
-    HEADERS = {"Authorization": f"Bearer {BLAXEL_API_KEY}"}
-
     # create sandbox if it doesn't exist
     sandbox = await SandboxInstance.create_if_not_exists({
-      "name": "my-sandbox-04",
+      "name": "my-sandbox-05",
       "image": "blaxel/nextjs:latest",
       "memory": 4096,
-      "region": "us-pdx-1"
+      "region": "us-pdx-1",
+      "ttl": "1h"
     })
     print("OK: Sandbox created")
 
@@ -97,7 +93,7 @@ async def develop(request: Request):
 
     # configure sandbox MCP access
     mcp_client = MCPClient(
-        lambda: streamable_http_client(sandbox.metadata.url + "/mcp", http_client=httpx.AsyncClient(headers=HEADERS))
+        lambda: streamable_http_client(sandbox.metadata.url + "/mcp", http_client=httpx.AsyncClient(headers=settings.headers))
     )
 
     def log_callback(**kwargs):
@@ -116,6 +112,7 @@ async def develop(request: Request):
             callback_handler=log_callback,
         )
         result = agent(task)
+
         print("\n=== Agent response ===")
         print(result)
         print("OK: Agent session completed")
@@ -134,6 +131,13 @@ curl -X POST http://localhost:8000/develop \
   -H "Content-Type: application/json" \
   -d '{"task": "Add a dark mode toggle to the homepage."}'
 
+curl -X POST "https://agt-05-develop-webapp-nb1rct.bl.run/develop" \
+  -H "Content-Type: application/json" \
+  -H "X-Blaxel-Workspace: $BL_WORKSPACE" \
+  -H "X-Blaxel-Authorization: Bearer $BL_API_KEY" \
+  -d '{"task": "Add a dark mode toggle to the homepage."}'
+
+bl run agent 05-develop-webapp/develop --data '{"task": "Add a dark mode toggle to the homepage."}'
 
 curl -X POST http://localhost:8000/develop \
   -H "Content-Type: application/json" \
