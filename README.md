@@ -3,12 +3,6 @@
 ## Prerequisites
 
 - Python 3.12+ development environment
-- Blaxel account
-  - [Sign up free](https://app.blaxel.ai?utm_source=osd_amd_04_2026&utm_medium=conference&utm_campaign=q2_2026_events)
-- Blaxel CLI
-  - [Install the CLI](https://docs.blaxel.ai/cli-reference/introduction?utm_source=osd_amd_04_2026&utm_medium=conference&utm_campaign=q2_2026_events)
-- Blaxel API key
-  - [Generate an API key](https://docs.blaxel.ai/Security/Access-tokens#manage-api-keys?utm_source=osd_amd_04_2026&utm_medium=conference&utm_campaign=q2_2026_events)
 - LLM provider API key (Gemini, Anthropic or OpenAI)
 
 ## Setup and usage
