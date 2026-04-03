@@ -30,7 +30,7 @@ async def develop(request: Request):
     #LLM_API_KEY = os.environ["GOOGLE_API_KEY"]
 
     if not LLM_API_KEY:
-        raise HTTPException(status_code=500, detail="ANTHROPIC_API_KEY, OPENAI_API_KEY or GEMINI_API_KEY env var is required")
+        raise HTTPException(status_code=500, detail="ANTHROPIC_API_KEY, OPENAI_API_KEY or GOOGLE_API_KEY env var is required")
 
     body = await request.json()
     task = body.get("task")
